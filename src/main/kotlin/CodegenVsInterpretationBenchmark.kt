@@ -6,7 +6,7 @@ import kotlin.random.Random
 @State(Scope.Benchmark)
 class CodegenVsInterpretationBenchmark {
 
-    private val size = 1000
+    private val size = 1000000
     private val testData = mutableListOf<MutableMap<String, Any?>>()
 
     @Setup
@@ -27,12 +27,14 @@ class CodegenVsInterpretationBenchmark {
     }
 
     @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
     fun benchmarkCodegen(): Int {
         testData.forEach { codegen(it) }
         return testData.size
     }
 
     @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
     fun benchmarkInterpretation(): Int {
         testData.forEach { interpretation(it) }
         return testData.size
