@@ -12,10 +12,12 @@ class CodegenVsInterpretationBenchmark {
     @Setup
     fun prepare() {
         repeat((0 until size).count()) {
+            val program = programs.random()
             testData.add(
                 mutableMapOf(
-                    "a" to randomStringByKotlinRandom(Random.nextInt(5, 15)),
-                    "b" to randomStringByKotlinRandom(Random.nextInt(5, 15))
+                    "event" to "run program",
+                    "program" to program,
+                    "command" to commands[program]!!
                 )
             )
         }

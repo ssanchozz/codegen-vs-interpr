@@ -1,6 +1,5 @@
 package org.example
 
-import kotlin.random.Random
 import kotlin.time.DurationUnit
 import kotlin.time.measureTime
 
@@ -10,9 +9,11 @@ fun main() {
 
 private fun naiveBenchmark() {
     val testData = (0 until 10000000).map {
+        val program = programs.random()
         mutableMapOf<String, Any?>(
-            "a" to randomStringByKotlinRandom(Random.nextInt(5, 15)),
-            "b" to randomStringByKotlinRandom(Random.nextInt(5, 15))
+            "event" to "run program",
+            "program" to program,
+            "command" to commands[program]!!
         )
     }
 
