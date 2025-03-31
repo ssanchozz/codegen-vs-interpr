@@ -18,33 +18,29 @@ class StringNode(
     override val value: String,
 ) : LiteralNode<String>
 
-class StringExtractionNode(
-    private val getLiteral: (MutableMap<String, Any?>) -> String,
+class StringFieldNode(
+    private val fieldName: String,
 ) : StringFunctionNode {
     override fun eval(
         json: MutableMap<String, Any?>
-    ): String = getLiteral(json)
+    ): String = json[fieldName] as String
 }
 
 class AndNode(
-    private val lhs: Node,
-    private val rhs: Node,
+    private vararg val args: Node,
 ) : BooleanFunctionNode {
-
     override fun eval(json: MutableMap<String, Any?>): Boolean {
-        val l = if (lhs is LiteralNode<*>) {
-            (lhs as LiteralNode<Boolean>).value
-        } else {
-            (lhs as BooleanFunctionNode).eval(json)
+        for (arg in args) {
+            val res = if (arg is LiteralNode<*>) {
+                (arg as LiteralNode<Boolean>).value
+            } else {
+                (arg as BooleanFunctionNode).eval(json)
+            }
+            if (!res) {
+                return false
+            }
         }
-
-        val r = if (rhs is LiteralNode<*>) {
-            (rhs as LiteralNode<Boolean>).value
-        } else {
-            (lhs as BooleanFunctionNode).eval(json)
-        }
-
-        return l && r
+        return true
     }
 }
 
@@ -57,13 +53,13 @@ class ContainsFunctionNode(
         val l = if (lhs is LiteralNode<*>) {
             (lhs as LiteralNode<String>).value
         } else {
-            (lhs as StringExtractionNode).eval(json)
+            (lhs as StringFieldNode).eval(json)
         }
 
         val r = if (rhs is LiteralNode<*>) {
             (rhs as LiteralNode<String>).value
         } else {
-            (lhs as StringExtractionNode).eval(json)
+            (lhs as StringFieldNode).eval(json)
         }
 
         return l.contains(r)

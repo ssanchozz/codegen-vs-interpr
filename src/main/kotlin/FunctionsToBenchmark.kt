@@ -24,18 +24,16 @@ fun interpretation(json: MutableMap<String, Any?>) {
 
 private val INTERPRETATION_TREE =
     AndNode(
-        AndNode(
-            ContainsFunctionNode(
-                StringExtractionNode(extractField("event")),
-                StringNode("run"),
-            ),
-            ContainsFunctionNode(
-                StringExtractionNode(extractField("program")),
-                StringNode("bank"),
-            )
+        ContainsFunctionNode(
+            StringFieldNode("event"),
+            StringNode("run"),
         ),
         ContainsFunctionNode(
-            StringExtractionNode(extractField("command")),
+            StringFieldNode("program"),
+            StringNode("bank"),
+        ),
+        ContainsFunctionNode(
+            StringFieldNode("command"),
             StringNode("password"),
         )
     )

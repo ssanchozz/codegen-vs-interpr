@@ -1,7 +1,6 @@
 package org.example
 
 import kotlinx.benchmark.*
-import kotlin.random.Random
 
 @State(Scope.Benchmark)
 class CodegenVsInterpretationBenchmark {
